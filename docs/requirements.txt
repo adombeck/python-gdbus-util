@@ -1,0 +1,4 @@
+sphinx==7.2.6
+sphinx-rtd-theme==2.0.0
+PyGObject==3.46.0
+cysystemd==1.6.0
