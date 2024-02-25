@@ -31,8 +31,8 @@ See the :class:`~gdbus_util.ExitOnIdleService` documentation for more informatio
 Installation
 ------------
 
-Install via pip:
+To install the latest release from PyPI:
 
 .. code-block:: console
 
-   $ pip install gdbus_util
+   $ pip install gdbus-util

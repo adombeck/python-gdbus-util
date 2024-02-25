@@ -25,6 +25,15 @@ automatically when they are no longer needed.
 See the [`ExitOnIdleService` documentation](https://python-gdbus-util.readthedocs.io/en/latest/api/exit_on_idle_service.html)
 for more information.
 
+Installation
+------------
+
+To install the latest release from PyPI:
+
+```bash
+pip install gdbus-util
+```
+
 Credits
 -------
 The race-free exit-on-idle implementation was inspired by 
