@@ -8,7 +8,7 @@ version = "0.0.3"
 authors = [
   { name="Adrian Dombeck", email="adrian.dombeck@gmail.com" },
 ]
-description = "Easy GDBus service creation with exit-on-idle functionality"
+description = "Easy GDBus service creation with exit-on-idle functionality."
 readme = "README.md"
 requires-python = ">=3.11"
 classifiers = [
@@ -19,5 +19,4 @@ classifiers = [
 
 [project.urls]
 Documentation = "https://python-gdbus-util.readthedocs.io/en/latest/"
-GitHub = "https://github.com/adombeck/python-gdbus-util"
-Issues = "https://github.com/adombeck/python-gdbus-util/issues"
+Source = "https://github.com/adombeck/python-gdbus-util"
