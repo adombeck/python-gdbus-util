@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "gdbus-util"
-version = "0.0.3"
+version = "0.1.0"
 authors = [
   { name="Adrian Dombeck", email="adrian.dombeck@gmail.com" },
 ]
