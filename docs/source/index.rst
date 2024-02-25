@@ -5,6 +5,10 @@
    api/exit_on_idle_service
    api/dbus_error
 
+.. sidebar-links::
+   :github:
+   :pypi: gdbus-util
+
 Python GDBus Util
 =================
 

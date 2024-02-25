@@ -24,6 +24,8 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx',
+    'sphinx_toolbox.github',
+    'sphinx_toolbox.sidebar_links',
 ]
 
 intersphinx_mapping = {
@@ -33,6 +35,15 @@ intersphinx_mapping = {
 intersphinx_disabled_domains = ['std']
 
 templates_path = ['_templates']
+
+# --- Options for sidebar_links extension
+
+# Add link to the GitHub repository
+github_username = 'adombeck'
+github_repository = 'python-gdbus-util'
+
+# Add link to PyPI
+pypi_name = 'gdbus-util'
 
 # -- Options for HTML output
 

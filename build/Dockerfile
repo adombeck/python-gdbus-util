@@ -12,5 +12,6 @@ RUN --mount=type=cache,target=/root/.cache \
     sphinx \
     sphinx_rtd_theme \
     readthedocs-sphinx-ext \
+    sphinx-toolbox \
     PyGObject \
     cysystemd
