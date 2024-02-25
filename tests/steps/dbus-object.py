@@ -31,8 +31,6 @@ DBUS_USER_PATH = "/org/example/Accounts/User"
 DBUS_USER_INTERFACE = "org.example.Accounts.User"
 
 mainloop = GLib.MainLoop()
-received_user_added_signal = False
-received_properties_changed_signal = False
 
 logger = logging.getLogger(__name__)
 
@@ -47,6 +45,8 @@ class TestContext:
     journalctl_process: subprocess.Popen
     user_path: str
     received_expected_error: bool
+    received_user_added_signal = False
+    received_properties_changed_signal = False
 
 
 def start_accounts_service(unit_name: str) -> subprocess.Popen:
@@ -67,28 +67,6 @@ def call_set_password(context, password: str):
     )
 
 
-def on_user_added_signal(connection: Gio.DBusConnection, sender_name: str,
-                         object_path: str, interface_name: str, signal_name: str,
-                         parameters: GLib.Variant):
-    logger.debug("Received signal %s from %s", signal_name, sender_name)
-    if signal_name == "UserAdded":
-        logger.debug("Received UserAdded signal (parameters: %s)", parameters)
-        global received_user_added_signal
-        received_user_added_signal = True
-        mainloop.quit()
-
-
-def on_properties_changed(proxy: Gio.DBusProxy,
-                          changed_properties: GLib.Variant,
-                          invalidated_properties: GLib.Variant):
-    logger.debug("Received PropertiesChanged signal "
-                 "(changed_properties: %s, invalidated_properties: %s)")
-    assert "Password" in changed_properties.unpack()
-    global received_properties_changed_signal
-    received_properties_changed_signal = True
-    mainloop.quit()
-
-
 @given("The accounts-service is running")
 def step_impl(context):
     unit_name = f"accounts-service-test-{random.randbytes(4).hex()}"
@@ -99,6 +77,15 @@ def step_impl(context):
 
 @when("I subscribe to the UserAdded signal")
 def step_impl(context):
+    def on_user_added_signal(connection: Gio.DBusConnection, sender_name: str,
+                             object_path: str, interface_name: str,
+                             signal_name: str, parameters: GLib.Variant):
+        logger.debug("Received signal %s from %s", signal_name, sender_name)
+        if signal_name == "UserAdded":
+            logger.debug("Received UserAdded signal (parameters: %s)", parameters)
+            context.received_user_added_signal = True
+            mainloop.quit()
+
     context.bus.signal_subscribe(
         sender=DBUS_NAME,
         interface_name=DBUS_INTERFACE,
@@ -113,7 +100,7 @@ def step_impl(context):
 @then("I should receive the UserAdded signal")
 def step_impl(context):
     mainloop.run()
-    assert received_user_added_signal
+    assert context.received_user_added_signal
 
 
 @when("I call the CreateUser method")
@@ -144,6 +131,16 @@ def step_impl(context):
         DBUS_USER_INTERFACE,
         None,
     )
+
+    def on_properties_changed(proxy: Gio.DBusProxy,
+                              changed_properties: GLib.Variant,
+                              invalidated_properties: GLib.Variant):
+        logger.debug("Received PropertiesChanged signal "
+                     "(changed_properties: %s, invalidated_properties: %s)")
+        assert "Password" in changed_properties.unpack()
+        context.received_properties_changed_signal = True
+        mainloop.quit()
+
     context.proxy.connect("g-properties-changed", on_properties_changed)
 
 
@@ -155,7 +152,7 @@ def step_impl(context):
 @then("I should receive the PropertiesChanged signal")
 def step_impl(context):
     mainloop.run()
-    assert received_properties_changed_signal
+    assert context.received_properties_changed_signal
 
 
 @when("I call the SetPassword method with a password that is too short")
@@ -163,10 +160,10 @@ def step_impl(context):
     try:
         call_set_password(context, "short")
     except GLib.Error as e:
-        assert PasswordTooShortError.is_instance(e)
+        assert PasswordTooShortError.is_instance(e)  # noqa: PT017
         PasswordTooShortError.strip_remote_error(e)
         logger.info("Received error: %s", e.message)
-        assert e.message == "Password must be at least 8 characters long"
+        assert e.message == "Password must be at least 8 characters long"  # noqa: PT017
         context.received_expected_error = True
 
 

@@ -1,10 +1,9 @@
 import subprocess
 import sys
 from pathlib import Path
-from typing import Union
 
 
-def start_service(service_path: Union[Path, str], dbus_name: str, unit_name: str,
+def start_service(service_path: Path | str, dbus_name: str, unit_name: str,
                   *args):
     cmd = ["systemd-run", "--user", "--service-type=dbus", "--collect",
            f"--unit={unit_name}.service", f"--property=BusName={dbus_name}",
@@ -17,8 +16,9 @@ def start_service(service_path: Union[Path, str], dbus_name: str, unit_name: str
             print(e.stderr, file=sys.stderr)
         # Print the log of the service
         print("Service log:", file=sys.stderr)
-        subprocess.check_call(["journalctl", "--user", f"-u{unit_name}.service",
-                               "--no-pager", "--output=cat"])
+        subprocess.check_call(["/usr/bin/journalctl", "--user",
+                               f"-u{unit_name}.service", "--no-pager",
+                               "--output=cat"])
         print("Service log end", file=sys.stderr)
         raise
 
@@ -26,12 +26,14 @@ def start_service(service_path: Union[Path, str], dbus_name: str, unit_name: str
 def stop_service(unit_name: str):
     if not is_service_active(unit_name):
         return
-    subprocess.run(["systemctl", "--user", "stop", f"{unit_name}.service"])
+    subprocess.check_call(["/usr/bin/systemctl", "--user", "stop",
+                           f"{unit_name}.service"])
 
 
 def is_service_active(unit_name: str) -> bool:
-    p = subprocess.run(["systemctl", "--user", "--quiet", "is-active",
-                        f"{unit_name}.service"])
+    p = subprocess.run(["/usr/bin/systemctl", "--user", "--quiet", "is-active",
+                        f"{unit_name}.service"],
+                       check=False)
     return p.returncode == 0
 
 

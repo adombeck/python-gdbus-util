@@ -10,7 +10,7 @@ sys.path.insert(0, root_path)
 # -- Project information
 
 project = 'Python GDBus Util'
-copyright = '2024, Adrian Dombeck'
+copyright = '2024, Adrian Dombeck'  # noqa: A001
 author = 'Adrian Dombeck'
 
 release = '0.1'

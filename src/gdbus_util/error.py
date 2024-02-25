@@ -22,7 +22,6 @@ class DBusError(Exception):
     def name(self) -> str:
         """A valid D-Bus error name, for example
         ``"org.example.Error.FooBar"``."""
-        pass
 
     @classmethod
     def is_instance(cls, err) -> bool:

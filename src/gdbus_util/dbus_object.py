@@ -20,7 +20,7 @@ from .exit_on_idle import ExitOnIdleService
 logger = logging.getLogger(__package__)
 
 PROFILING = False
-PROFILES_DIR: Optional[str] = None
+PROFILES_DIR: str | None = None
 
 
 class RegistrationFailedError(Exception):
@@ -86,7 +86,6 @@ class DBusObject(metaclass=ABCMeta):
            </node>
            \"""
         """
-        pass
 
     @property
     @abstractmethod
@@ -102,7 +101,6 @@ class DBusObject(metaclass=ABCMeta):
 
               dbus_path = '/org/example/Foo'
         """
-        pass
 
     def __init__(self, connection: Gio.DBusConnection):
         if isinstance(self, ExitOnIdleService):
@@ -186,7 +184,7 @@ class DBusObject(metaclass=ABCMeta):
         self,
         interface_name: str,
         changed_properties: dict[str, Any],
-        invalidated_properties: Optional[list[str]] = None,
+        invalidated_properties: list[str] | None = None,
     ) -> None:
         """Emit the PropertiesChanged signal for a D-Bus interface.
 

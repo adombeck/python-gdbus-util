@@ -4,7 +4,6 @@ import logging
 import signal
 import threading
 from enum import Enum
-from typing import Optional
 
 from gi.repository import GLib
 from gi.repository import Gio
@@ -86,7 +85,7 @@ class ExitOnIdleService:
         self.name = name
         self.timeout = timeout
         self._state: _State = _State.RUNNING
-        self._idle_timeout_source: Optional[GLib.Source] = None
+        self._idle_timeout_source: GLib.Source | None = None
         self._idle_timer_lock = threading.Lock()
         self._acquired_name = False
 
