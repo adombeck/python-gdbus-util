@@ -63,8 +63,8 @@ class ExitOnIdleService:
     `accounts-service.py`_ for a more complex example of how to to
     implement an exit-on-idle service.
 
-    .. _sleeper-service.py: https://github.com/adombeck/python-gdbus-util/blob/main/examples/exit-on-idle/sleeper-service.py#L40-L40
-    .. _accounts-service.py: https://github.com/adombeck/python-gdbus-util/blob/main/examples/more-complex/accounts-service.py#L54-L54
+    .. _sleeper-service.py: https://github.com/adombeck/python-gdbus-util/blob/main/examples/exit-on-idle/sleeper-service.py
+    .. _accounts-service.py: https://github.com/adombeck/python-gdbus-util/blob/main/examples/more-complex/accounts-service.py
 
     .. [1] Note that this only works as expected if no other D-Bus
            objects are registered on the same connection. If there are
