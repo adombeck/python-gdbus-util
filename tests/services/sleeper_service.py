@@ -7,13 +7,12 @@ from gi.repository import Gio
 from gdbus_util import DBusObject, ExitOnIdleService
 
 
-DBUS_NAME = "org.example.Sleeper"
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
-if len(sys.argv) > 1:
-    # In the test, we pass the timeout as the first argument
-    TIMEOUT = int(sys.argv[1])
-else:
-    TIMEOUT = 30
+
+DBUS_NAME = "org.example.Sleeper"
+DEFAULT_TIMEOUT = 30
 
 
 class SleeperObject(DBusObject):
@@ -77,9 +76,17 @@ class SleeperService(DBusObject, ExitOnIdleService):
         return True
 
 
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+def main():
+    if len(sys.argv) > 1:
+        # In the test, we pass the timeout as the first argument
+        timeout = int(sys.argv[1])
+    else:
+        timeout = DEFAULT_TIMEOUT
 
-bus = Gio.bus_get_sync(Gio.BusType.SESSION)
-service = SleeperService(connection=bus, name=DBUS_NAME, timeout=TIMEOUT)
-service.run()
+    bus = Gio.bus_get_sync(Gio.BusType.SESSION)
+    service = SleeperService(connection=bus, name=DBUS_NAME, timeout=timeout)
+    service.run()
+
+
+if __name__ == "__main__":
+    main()
