@@ -165,7 +165,8 @@ def step_impl(context):
     except GLib.Error as e:
         assert PasswordTooShortError.is_instance(e)
         PasswordTooShortError.strip_remote_error(e)
-        logger.info("Received expected error: %s", e)
+        logger.info("Received error: %s", e.message)
+        assert e.message == "Password must be at least 8 characters long"
         context.received_expected_error = True
 
 
