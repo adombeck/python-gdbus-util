@@ -1,5 +1,8 @@
 Python GDBus Util
-===========
+=================
+
+[![Read the Docs](https://readthedocs.org/projects/python-gdbus-util/badge/?version=latest)](https://python-gdbus-util.readthedocs.io/en/latest/)
+[![PyPI - Version](https://img.shields.io/pypi/v/gdbus_util.svg)](https://pypi.org/project/gdbus_util/)
 
 A collection of utilities to create GDBus services in Python.
 
