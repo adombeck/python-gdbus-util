@@ -10,8 +10,10 @@ from gi.repository import Gio
 
 try:
     import cysystemd.daemon as systemd_daemon
+    CYSYSTEMD = True
 except ImportError:
     import systemd.daemon as systemd_daemon
+    CYSYSTEMD = False
 
 logger = logging.getLogger(__package__)
 
@@ -204,7 +206,10 @@ class ExitOnIdleService:
         # are still running.
         # See https://github.com/systemd/systemd/blob/4931b8e471438abbc44d/src/shared/bus-util.c#L131
         logger.debug("Notifying systemd that we are stopping")
-        systemd_daemon.notify("STOPPING=1")
+        if CYSYSTEMD:
+            systemd_daemon.notify(systemd_daemon.Notification.STOPPING)
+        else:
+            systemd_daemon.notify("STOPPING=1")
 
         # Unregister the name and wait for the NameOwnerChanged signal.
         # We do this in order to make sure that any queued requests are
